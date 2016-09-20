@@ -6,18 +6,56 @@ $.fn.KianaInit = function () {
     var kianaImg4 = "img/kiana-4.png";
     var dragMp3 = "mp3/kiana_drag.mp3"
 
-    //创建图片div  class="kianaImgDiv"
-    $(this).append("<div class='kianaImgDiv'></div>");
-    //向图片div里创建图片，用于显示kiana
-    $(".kianaImgDiv").append("<img id='kianaImg' />");
-    //kianaImg 默认src=第一张
-    $("#kianaImg").attr("src", kianaImg1);
-
     //拖动效果
     $(this).dragging({
         move: 'both',
         randomPosition: false
     });
+
+
+    //创建图片div  class="kianaImgDiv"
+    $(this).append("<div class='kianaImgDiv'></div>");
+    //向图片div里创建图片，用于显示kiana
+    $(".kianaImgDiv").append("<img id='kianaImg' />");
+    //kianaImg 默认src=第一张
+    $("#kianaImg").prop("src", kianaImg1);
+
+    //创建mp3 div class="kianaMP3Div"
+    $(this).append("<div class='kianaMP3Div'></div>");
+    //向MP3div里创建audio    
+    $(".kianaMP3Div").append("<audio id='kianaAudio'></audio>");
+
+
+    //鼠标
+    //进入kianaImgDiv时,显示第3张图片，
+    //离开时，显示第1张，
+    //按下时:显示第4张
+    //弹起时：显示第三张
+    //移动时:判断isDown的状态，如果为true,说明按下且拖动，则显示第二张，并播放dargmp3
+    // isDown表示鼠标是否按下
+    var isDown = false;
+    $(".kianaImgDiv").mouseenter(function () {
+        $("#kianaImg").prop("src", kianaImg3);
+    }).mouseleave(function () {
+        $("#kianaImg").prop("src", kianaImg1);
+    }).mousedown(function () {
+        isDown = true;
+        $("#kianaImg").prop("src", kianaImg4);
+    }).mouseup(function () {
+        $("#kianaImg").prop("src", kianaImg3);
+        isDown = false;
+    }).mousemove(function () {
+        if (isDown) {
+            $("#kianaImg").prop("src", kianaImg2);
+            var isPlay = document.getElementById("kianaAudio").paused;
+            if (isPlay) {
+                $("#kianaAudio").prop("src", dragMp3);
+                document.getElementById("kianaAudio").play();
+            }
+        }
+        isDown=false;
+    });
+
 };
 
 
