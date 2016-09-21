@@ -1,10 +1,16 @@
 $.fn.KianaInit = function () {
     //资源配置
+    //图片
     var kianaImg1 = "img/kiana-1.png";
     var kianaImg2 = "img/kiana-2.png";
     var kianaImg3 = "img/kiana-3.gif";
     var kianaImg4 = "img/kiana-4.png";
+    //MP3
     var dragMp3 = "mp3/kiana_drag.mp3"
+
+    //存语言和MP3的json对象,每个语言对应一个mp3
+    var LanMp3 = { "呀~~": dragMp3 };
+
 
     //拖动效果
     $(this).dragging({
@@ -12,25 +18,32 @@ $.fn.KianaInit = function () {
         randomPosition: false
     });
 
+    //创建一个div包括所有内容
+    $(this).append("<div class='kiana'></div>");
 
     //创建图片div  class="kianaImgDiv"
-    $(this).append("<div class='kianaImgDiv'></div>");
+    $(".kiana").append("<div class='kianaImgDiv'></div>");
     //向图片div里创建图片，用于显示kiana
     $(".kianaImgDiv").append("<img id='kianaImg' />");
     //kianaImg 默认src=第一张
     $("#kianaImg").prop("src", kianaImg1);
 
     //创建mp3 div class="kianaMP3Div"
-    $(this).append("<div class='kianaMP3Div'></div>");
+    $(".kiana").append("<div class='kianaMP3Div'></div>");
     //向MP3div里创建audio    
     $(".kianaMP3Div").append("<audio id='kianaAudio'></audio>");
+    var $kianaAudio=$("#kianaAudio");
+    
+    //创建语言气泡div
+    $(".kiana").append("<div class='kianaLanguage'></div>");
+
 
 
     //鼠标
     //进入kianaImgDiv时,显示第3张图片，
     //离开时，显示第1张，
-    //按下时:显示第4张
-    //弹起时：显示第三张
+    //按下时:显示第4张,并随机播放MP3和一句话
+    //弹起时：显示第3张
     //移动时:判断isDown的状态，如果为true,说明按下且拖动，则显示第二张，并播放dargmp3
     // isDown表示鼠标是否按下
     var isDown = false;
@@ -38,28 +51,35 @@ $.fn.KianaInit = function () {
         $("#kianaImg").prop("src", kianaImg3);
     }).mouseleave(function () {
         $("#kianaImg").prop("src", kianaImg1);
-    }).mousedown(function () {
-        isDown = true;
-        $("#kianaImg").prop("src", kianaImg4);
-    }).mouseup(function () {
-        $("#kianaImg").prop("src", kianaImg3);
         isDown = false;
+    }).mousedown(function () {
+        $("#kianaImg").prop("src", kianaImg4);
+        isDown = true;
+    }).mouseup(function () {
+        isDown = false;
+        $("#kianaImg").prop("src", kianaImg3);
     }).mousemove(function () {
         if (isDown) {
             $("#kianaImg").prop("src", kianaImg2);
-            var isPlay = document.getElementById("kianaAudio").paused;
-            if (isPlay) {
-                $("#kianaAudio").prop("src", dragMp3);
-                document.getElementById("kianaAudio").play();
+            var isPaused = document.getElementById("kianaAudio").paused;
+            if (isPaused) {
+                $kianaAudio.prop("src", dragMp3);
+                $kianaAudio[0].play();
+                //to do 这里应该有个通用的方法
+                $(".kianaLanguage").css("display", "block");
+                $(".kianaLanguage").text("呀~~");
             }
         }
-        isDown=false;
+        isDown = false;
     });
 
+    //MP3播放完成
+    $kianaAudio[0].onended = function () {
+        $(".kianaLanguage").css("display", "none");
+        $(".kianaLanguage").text("");
+    };
+    
 };
-
-
-
 
 
 //拖动
