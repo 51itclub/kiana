@@ -2,13 +2,11 @@
     display:none;
 }
 .kianaLanguage{
-    /*border: 1px red solid;*/
     opacity:0.5;
     border-radius: 6px;
-    width: 180px;
+    width: 150px;
     background-color:rgb(24,63,160);
     color: white;
-    /*text-align: center;*/
     font-size: 14px;
     word-wrap:break-word;
     padding: 5% 3%;

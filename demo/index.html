@@ -1,15 +1,21 @@
 <html>
-    <head>
-        <title>kiana</title>
-        <link rel="stylesheet" href="../src/css/kiana.css">
-    </head>
-    <body>
-        <div id="div1"></div>
-        <script src="../src/js/jquery.min.js"></script>
-        <script src="../src/js/kiana.js"></script>
-     
-        <script>
-            $("#div1").KianaInit();
-        </script>
-    </body>
+
+<head>
+    <title>kiana</title>
+    <link rel="stylesheet" href="../src/css/kiana.css">
+</head>
+
+<body>
+    <div id="div1"></div>
+   
+    <script src="../src/js/jquery.min.js"></script>
+    <script src="../src/js/kiana.js"></script>
+
+    <script>
+            $("#div1").KianaInit({
+                randomPosition:true
+            });
+     </script>
+</body>
+
 </html>

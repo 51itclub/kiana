@@ -1,4 +1,12 @@
-$.fn.KianaInit = function () {
+$.fn.KianaInit = function (data) {
+     //设置index
+    $(this).css("z-index","999999");
+    //拖动效果
+    $(this).dragging({
+        move: 'both',
+        randomPosition: data.randomPosition //位置是否随机
+    });
+
     //资源配置
     //图片
     var kianaImg1 = "img/kiana-1.png";
@@ -6,17 +14,52 @@ $.fn.KianaInit = function () {
     var kianaImg3 = "img/kiana-3.gif";
     var kianaImg4 = "img/kiana-4.png";
     //MP3
-    var dragMp3 = "mp3/kiana_drag.mp3"
+    var dragMp3 = "mp3/kiana_drag.mp3";
+    var kiana_1Mp3 = "mp3/kiana_1.mp3";
+    var kiana_2Mp3 = "mp3/kiana_2.mp3";
+    var kiana_3Mp3 = "mp3/kiana_3.mp3";
+    var kiana_4Mp3 = "mp3/kiana_4.mp3";
+    var kiana_5Mp3 = "mp3/kiana_5.mp3";
+    var kiana_6Mp3 = "mp3/kiana_6.mp3";
+    var kiana_7Mp3 = "mp3/kiana_7.mp3";
+    var kiana_8Mp3 = "mp3/kiana_8.mp3";
+    var kiana_9Mp3 = "mp3/kiana_9.mp3";
+    var kiana_10Mp3 = "mp3/kiana_10.mp3";
+    var kiana_11Mp3 = "mp3/kiana_11.mp3";
+    //语言
+    var lan =
+        [
+            "呀~~",
+            "快看快看我抽到了什么",
+            "去死去死去死去死！！",
+            "主人,人家钱包都空了~",
+            "变态！",
+            "kiana,变身",
+            "哼,mihoyou什么的最讨厌了！！！",
+            "千万别小看我哟",
+            "要加油哦",
+            "我就知道主人最疼人家了",
+            "锵锵~",
+            "烦死啦走开走开啦！！！",
+        ];
 
     //存语言和MP3的json对象,每个语言对应一个mp3
-    var LanMp3 = { "呀~~": dragMp3 };
+    var LanMp3 = {
+        "呀~~": dragMp3,
+        "快看快看我抽到了什么": kiana_1Mp3,
+        "去死去死去死去死！！": kiana_2Mp3,
+        "主人,人家钱包都空了~": kiana_3Mp3,
+        "变态！": kiana_4Mp3,
+        "kiana,变身": kiana_5Mp3,
+        "哼,mihoyou什么的最讨厌了！！！": kiana_6Mp3,
+        "千万别小看我哟": kiana_7Mp3,
+        "要加油哦": kiana_8Mp3,
+        "我就知道主人最疼人家了": kiana_9Mp3,
+        "锵锵~": kiana_10Mp3,
+        "烦死啦走开走开啦！！！": kiana_11Mp3,
+    };
 
-
-    //拖动效果
-    $(this).dragging({
-        move: 'both',
-        randomPosition: false
-    });
+   
 
     //创建一个div包括所有内容
     $(this).append("<div class='kiana'></div>");
@@ -32,12 +75,10 @@ $.fn.KianaInit = function () {
     $(".kiana").append("<div class='kianaMP3Div'></div>");
     //向MP3div里创建audio    
     $(".kianaMP3Div").append("<audio id='kianaAudio'></audio>");
-    var $kianaAudio=$("#kianaAudio");
-    
+
+
     //创建语言气泡div
     $(".kiana").append("<div class='kianaLanguage'></div>");
-
-
 
     //鼠标
     //进入kianaImgDiv时,显示第3张图片，
@@ -54,31 +95,33 @@ $.fn.KianaInit = function () {
         isDown = false;
     }).mousedown(function () {
         $("#kianaImg").prop("src", kianaImg4);
+        var o = GetLanMp3(LanMp3, lan);
+        Mp3PlayAndShowMsg(o.mp3Src, o.lan);
         isDown = true;
     }).mouseup(function () {
         isDown = false;
-        $("#kianaImg").prop("src", kianaImg3);
+        if ($("#kianaAudio")[0].paused) {
+            $("#kianaImg").prop("src", kianaImg3);
+        }
     }).mousemove(function () {
         if (isDown) {
             $("#kianaImg").prop("src", kianaImg2);
-            var isPaused = document.getElementById("kianaAudio").paused;
-            if (isPaused) {
-                $kianaAudio.prop("src", dragMp3);
-                $kianaAudio[0].play();
-                //to do 这里应该有个通用的方法
-                $(".kianaLanguage").css("display", "block");
-                $(".kianaLanguage").text("呀~~");
-            }
+            $("#kianaAudio").prop("src", dragMp3);
+            $("#kianaAudio")[0].play();
+            $(".kianaLanguage").css("display", "block");
+            $(".kianaLanguage").text(lan[0]);
         }
         isDown = false;
     });
 
     //MP3播放完成
-    $kianaAudio[0].onended = function () {
+    $("#kianaAudio")[0].onended = function () {
+        //隐藏语言气泡
         $(".kianaLanguage").css("display", "none");
         $(".kianaLanguage").text("");
+        //还原默认图片
+        $("#kianaImg").prop("src", kianaImg3);
     };
-    
 };
 
 
@@ -147,13 +190,12 @@ $.fn.dragging = function (data) {
                     left: randX
                 });
             }
-
         });
     }
 
     hander.mousedown(function (e) {
-        father.children().css({ "zIndex": "0" });
-        $this.css({ "zIndex": "1" });
+        //father.children().css({ "zIndex": "0" });
+        $this.css({ "zIndex": "999999" });
         mDown = true;
         X = e.pageX;
         Y = e.pageY;
@@ -231,4 +273,40 @@ $.fn.dragging = function (data) {
             thisAllMove();
         }
     });
-}; 
+};
+
+//播放MP3并显示语言
+Mp3PlayAndShowMsg = function (mp3Src, kianaLanguage) {
+    var isPaused = $("#kianaAudio")[0].paused;
+    if (isPaused) {
+        $("#kianaAudio").prop("src", mp3Src);
+        $("#kianaAudio")[0].play();
+        $(".kianaLanguage").css("display", "block");
+        $(".kianaLanguage").text(kianaLanguage);
+    }
+};
+
+var oldNum;//用来保存上一次的num，用来和生成的num做比较，保证不重复
+//随机从LanMp3抽取,返回一个包含mp3路径以及对应的话的对象
+GetLanMp3 = function (LanMp3, lan) {
+    //产生一个随机数0-11
+    while (true) {
+        var num = Math.floor(Math.random() * (11 + 1));
+        if (num < 0) {
+            num = 0;
+        }
+        if (num > 12) {
+            num = 12;
+        }
+        //如果和上一次的num不一样则退出
+        if(num!=oldNum){
+            break;
+        }
+    }
+    oldNum = num;
+    var obj = {
+        "mp3Src": LanMp3[lan[num]],
+        "lan": lan[num]
+    };
+    return obj;
+};
