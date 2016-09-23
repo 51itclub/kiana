@@ -125,6 +125,10 @@ $.fn.KianaInit = function (data) {
         if ($(".kianaCloseBtn").css("display") != "blcok") {
             $(".kianaCloseBtn").css("display", "block");
         }
+    },function(){
+         if ($(".kianaCloseBtn").css("display") != "none") {
+            $(".kianaCloseBtn").css("display", "none");
+        }
     });
 
     //MP3≤•∑≈ÕÍ≥…
