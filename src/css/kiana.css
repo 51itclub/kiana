@@ -15,3 +15,17 @@
     right:90px;
     display: none;
 }
+.kianaCloseBtn{
+position: absolute; 
+top: 0px; 
+right: 0px; 
+width: 18px; 
+height: 18px; 
+line-height: 18px; 
+font-size: 18px; 
+text-align: center; 
+cursor: pointer; 
+border-radius: 3px; 
+background-color: rgb(221, 221, 221);
+display:none;
+}

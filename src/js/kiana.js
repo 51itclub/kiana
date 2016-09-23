@@ -1,6 +1,6 @@
 $.fn.KianaInit = function (data) {
-     //设置index
-    $(this).css("z-index","999999");
+    //设置index
+    $(this).css("z-index", "999999");
     //拖动效果
     $(this).dragging({
         move: 'both',
@@ -59,7 +59,7 @@ $.fn.KianaInit = function (data) {
         "烦死啦走开走开啦！！！": kiana_11Mp3,
     };
 
-   
+
 
     //创建一个div包括所有内容
     $(this).append("<div class='kiana'></div>");
@@ -80,8 +80,16 @@ $.fn.KianaInit = function (data) {
     //创建语言气泡div
     $(".kiana").append("<div class='kianaLanguage'></div>");
 
+    //关闭按钮
+    $(".kiana").append("<div class='kianaCloseBtn'>×</div>");
+    //关闭kiana
+    $(".kianaCloseBtn").mousedown(function () {
+        $(".kiana").css("display", "none");
+    });
+
+
     //鼠标
-    //进入kianaImgDiv时,显示第3张图片，
+    //进入kianaImgDiv时,显示第3张图片，显示关闭按钮
     //离开时，显示第1张，
     //按下时:显示第4张,并随机播放MP3和一句话
     //弹起时：显示第3张
@@ -92,6 +100,7 @@ $.fn.KianaInit = function (data) {
         $("#kianaImg").prop("src", kianaImg3);
     }).mouseleave(function () {
         $("#kianaImg").prop("src", kianaImg1);
+        $(".kianaCloseBtn").css("display", "none");
         isDown = false;
     }).mousedown(function () {
         $("#kianaImg").prop("src", kianaImg4);
@@ -112,6 +121,10 @@ $.fn.KianaInit = function (data) {
             $(".kianaLanguage").text(lan[0]);
         }
         isDown = false;
+    }).hover(function () {
+        if ($(".kianaCloseBtn").css("display") != "blcok") {
+            $(".kianaCloseBtn").css("display", "block");
+        }
     });
 
     //MP3播放完成
@@ -122,6 +135,8 @@ $.fn.KianaInit = function (data) {
         //还原默认图片
         $("#kianaImg").prop("src", kianaImg3);
     };
+
+
 };
 
 
@@ -299,7 +314,7 @@ GetLanMp3 = function (LanMp3, lan) {
             num = 12;
         }
         //如果和上一次的num不一样则退出
-        if(num!=oldNum){
+        if (num != oldNum) {
             break;
         }
     }
