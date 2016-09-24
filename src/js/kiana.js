@@ -99,8 +99,10 @@ $.fn.KianaInit = function (data) {
     $(".kianaImgDiv").mouseenter(function () {
         $("#kianaImg").prop("src", kianaImg3);
     }).mouseleave(function () {
-        $("#kianaImg").prop("src", kianaImg1);
-        $(".kianaCloseBtn").css("display", "none");
+        if ($("#kianaAudio")[0].paused) {
+            $("#kianaImg").prop("src", kianaImg1);
+            $(".kianaCloseBtn").css("display", "none");
+        }
         isDown = false;
     }).mousedown(function () {
         $("#kianaImg").prop("src", kianaImg4);
@@ -125,8 +127,8 @@ $.fn.KianaInit = function (data) {
         if ($(".kianaCloseBtn").css("display") != "blcok") {
             $(".kianaCloseBtn").css("display", "block");
         }
-    },function(){
-         if ($(".kianaCloseBtn").css("display") != "none") {
+    }, function () {
+        if ($(".kianaCloseBtn").css("display") != "none") {
             $(".kianaCloseBtn").css("display", "none");
         }
     });
